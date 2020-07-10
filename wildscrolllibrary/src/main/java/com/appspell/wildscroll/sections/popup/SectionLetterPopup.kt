@@ -1,32 +1,28 @@
 package com.appspell.wildscroll.sections.popup
 
 import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Paint
+import android.graphics.*
 import android.graphics.Paint.Align.CENTER
-import android.graphics.PorterDuff
-import android.graphics.Rect
-import android.graphics.Typeface
 import android.graphics.drawable.Drawable
-import android.support.annotation.ColorRes
-import android.support.annotation.DimenRes
-import android.support.annotation.DrawableRes
-import android.support.v4.content.res.ResourcesCompat
+import androidx.annotation.ColorRes
+import androidx.annotation.DimenRes
+import androidx.annotation.DrawableRes
+import androidx.core.content.res.ResourcesCompat
 import appspell.com.wildscroll.R
 import com.appspell.wildscroll.sections.Sections
 
 
 open class SectionLetterPopup(
-        protected var context: Context,
-        @ColorRes
-        textColorRes: Int = R.color.fastscroll_highlight_text,
-        @DimenRes
-        textSizeDimen: Int = R.dimen.fastscroll_popup_section_text_size,
-        var textTypeFace: Typeface = Typeface.DEFAULT,
-        @DrawableRes
-        backgroundResource: Int = R.drawable.fastscroll_background_popup,
-        @DimenRes
-        paddingRes: Int = R.dimen.fastscroll_popup_padding
+    protected var context: Context,
+    @ColorRes
+    textColorRes: Int = R.color.fastscroll_highlight_text,
+    @DimenRes
+    textSizeDimen: Int = R.dimen.fastscroll_popup_section_text_size,
+    var textTypeFace: Typeface = Typeface.DEFAULT,
+    @DrawableRes
+    backgroundResource: Int = R.drawable.fastscroll_background_popup,
+    @DimenRes
+    paddingRes: Int = R.dimen.fastscroll_popup_padding
 ) : SectionPopup {
 
     var sectionTextSizeDimen: Int = textSizeDimen
@@ -141,7 +137,7 @@ open class SectionLetterPopup(
                 this.x = (sections.left - width).toInt() - sections.width.toInt()
                 this.y = y - height / 2
             }
-        //TODO top / bottom
+            //TODO top / bottom
         }
 
         //corrections
@@ -172,8 +168,8 @@ open class SectionLetterPopup(
     protected open fun drawText(canvas: Canvas) {
         val offset = ((textPaint.descent() + textPaint.ascent()) / 2f)
         canvas.drawText(sectionName,
-                x + width / 2f,
-                y + height / 2f - offset,
-                textPaint)
+            x + width / 2f,
+            y + height / 2f - offset,
+            textPaint)
     }
 }

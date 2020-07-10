@@ -1,10 +1,9 @@
 package com.appspell.wildscroll.adapter
 
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.RecyclerView.ViewHolder
+import androidx.recyclerview.widget.RecyclerView
 import com.appspell.wildscroll.sections.SectionInfo
 
-abstract class SectionFastScrollAdapter<VH : ViewHolder> : RecyclerView.Adapter<VH>(), SectionFastScroll {
+abstract class SectionFastScrollAdapter<VH : RecyclerView.ViewHolder> : RecyclerView.Adapter<VH>(), SectionFastScroll {
 
     var sections: Map<Int, SectionInfo> = emptyMap()
         set(value) {

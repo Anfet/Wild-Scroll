@@ -4,13 +4,13 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Typeface
-import android.support.annotation.ColorRes
-import android.support.annotation.DimenRes
-import android.support.annotation.DrawableRes
-import android.support.v4.content.res.ResourcesCompat
-import android.support.v7.widget.RecyclerView
 import android.util.AttributeSet
 import android.view.MotionEvent
+import androidx.annotation.ColorRes
+import androidx.annotation.DimenRes
+import androidx.annotation.DrawableRes
+import androidx.core.content.res.ResourcesCompat
+import androidx.recyclerview.widget.RecyclerView
 import appspell.com.wildscroll.R
 import com.appspell.wildscroll.sections.Gravity
 import com.appspell.wildscroll.sections.SectionBarView
@@ -19,9 +19,9 @@ import com.appspell.wildscroll.sections.popup.SectionLetterPopup
 import com.appspell.wildscroll.sections.popup.SectionPopup
 
 class WildScrollRecyclerView @JvmOverloads constructor(
-        context: Context,
-        attrs: AttributeSet? = null,
-        defStyle: Int = 0
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyle: Int = 0
 ) : RecyclerView(context, attrs, defStyle) {
 
     private val sectionBar = SectionBarView(this)
@@ -32,6 +32,7 @@ class WildScrollRecyclerView @JvmOverloads constructor(
         set(value) {
             sectionBar.textColor = ResourcesCompat.getColor(resources, value, context.theme)
         }
+
     @DimenRes
     var textSize: Int = R.dimen.fastscroll_section_text_size
         set(value) {
@@ -48,6 +49,7 @@ class WildScrollRecyclerView @JvmOverloads constructor(
         set(value) {
             sectionBar.highlightColor = ResourcesCompat.getColor(resources, value, context.theme)
         }
+
     @DimenRes
     var highlightTextSize: Int = R.dimen.fastscroll_section_highlight_text_size
         set(value) {
@@ -64,11 +66,13 @@ class WildScrollRecyclerView @JvmOverloads constructor(
         set(value) {
             sectionBar.sectionBarBackgroundColor = ResourcesCompat.getColor(resources, value, context.theme)
         }
+
     @DimenRes
     var sectionBarPaddingLeft: Int = R.dimen.fastscroll_section_padding
         set(value) {
             sectionBar.sectionBarPaddingLeft = resources.getDimension(value)
         }
+
     @DimenRes
     var sectionBarPaddingRight: Int = R.dimen.fastscroll_section_padding
         set(value) {
@@ -92,6 +96,7 @@ class WildScrollRecyclerView @JvmOverloads constructor(
         set(value) {
             sectionBar.popupEnable = value
         }
+
     @DrawableRes
     var popupBackground: Int = R.drawable.fastscroll_background_popup
         set(value) {
@@ -101,6 +106,7 @@ class WildScrollRecyclerView @JvmOverloads constructor(
                 (sectionBar.sectionPopup as SectionLetterPopup).backgroundResource = value
             }
         }
+
     @ColorRes
     var popupBackgroundColor: Int = R.color.fastscroll_popup_background
         set(value) {
@@ -110,6 +116,7 @@ class WildScrollRecyclerView @JvmOverloads constructor(
                 sectionBar.sectionPopup = SectionCirclePopup(context, backgroundColorRes = value)
             }
         }
+
     @ColorRes
     var popupTextColor: Int = R.color.fastscroll_highlight_text
         set(value) {
@@ -119,6 +126,7 @@ class WildScrollRecyclerView @JvmOverloads constructor(
                 sectionBar.sectionPopup = SectionCirclePopup(context, sectionTextColorRes = value)
             }
         }
+
     @DimenRes
     var popupTextSize: Int = R.dimen.fastscroll_popup_section_text_size
         set(value) {
@@ -128,6 +136,7 @@ class WildScrollRecyclerView @JvmOverloads constructor(
                 sectionBar.sectionPopup = SectionCirclePopup(context, sectionTextSizeDimen = value)
             }
         }
+
     @DimenRes
     var popupPadding: Int = R.dimen.fastscroll_popup_padding
         set(value) {
@@ -219,8 +228,8 @@ class WildScrollRecyclerView @JvmOverloads constructor(
     }
 
     override fun onInterceptTouchEvent(ev: MotionEvent): Boolean =
-            if (sectionBar.onInterceptTouchEvent(ev)) true
-            else super.onInterceptTouchEvent(ev)
+        if (sectionBar.onInterceptTouchEvent(ev)) true
+        else super.onInterceptTouchEvent(ev)
 
     override fun setAdapter(adapter: Adapter<*>?) {
         adapter?.registerAdapterDataObserver(dataObserver)

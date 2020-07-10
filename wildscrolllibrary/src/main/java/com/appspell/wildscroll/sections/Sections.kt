@@ -1,17 +1,12 @@
 package com.appspell.wildscroll.sections
 
-import android.support.v4.util.ArrayMap
-import android.support.v7.widget.RecyclerView
 import android.text.TextUtils
+import androidx.collection.ArrayMap
+import androidx.recyclerview.widget.RecyclerView
 import com.appspell.wildscroll.adapter.SectionFastScroll
 import com.appspell.wildscroll.adapter.SectionFastScrollAdapter
-import com.eatigo.common.coroutines.Android
-import kotlinx.coroutines.experimental.CommonPool
-import kotlinx.coroutines.experimental.Deferred
-import kotlinx.coroutines.experimental.Job
-import kotlinx.coroutines.experimental.async
-import kotlinx.coroutines.experimental.launch
-import java.util.TreeMap
+import kotlinx.coroutines.*
+import java.util.*
 
 interface OnSectionChangedListener {
     fun onSectionChanged()
@@ -67,15 +62,15 @@ class Sections {
                 height = h / sectionCount.toFloat()
                 left = w - width
             }
-        //TODO top / bottom
+            //TODO top / bottom
         }
     }
 
     fun contains(x: Float, y: Float): Boolean {
         return x >= left &&
-                x <= left + width &&
-                y >= top &&
-                y <= height * sections.size
+            x <= left + width &&
+            y >= top &&
+            y <= height * sections.size
     }
 
     fun getSectionInfoByIndex(index: Int): SectionInfo? {
@@ -84,15 +79,15 @@ class Sections {
     }
 
     fun createShortName(name: String): Char =
-            when {
-                name.isEmpty() -> SECTION_SHORT_NAME_EMPTY
-                collapseDigital && TextUtils.isDigitsOnly(name[0].toString()) -> SECTION_SHORT_NAME_DIGITAL
-                else -> name[0].toUpperCase()
-            }
+        when {
+            name.isEmpty() -> SECTION_SHORT_NAME_EMPTY
+            collapseDigital && TextUtils.isDigitsOnly(name[0].toString()) -> SECTION_SHORT_NAME_DIGITAL
+            else -> name[0].toUpperCase()
+        }
 
     fun refresh(adapter: RecyclerView.Adapter<*>?, listener: OnSectionChangedListener) { //TODO move it to separate class
         job?.cancel()
-        job = launch(Android) {
+        job = CoroutineScope(Dispatchers.Main).launch(GlobalScope.coroutineContext) {
             sections = fetchSections(adapter).await()
 //            prepareSectionsAdapter(adapter)
             listener.onSectionChanged()
@@ -105,7 +100,7 @@ class Sections {
     }
 
     private fun prepareSectionInformationForAdapter(): Deferred<Map<Int, SectionInfo>> {
-        return async(CommonPool) {
+        return CoroutineScope(Dispatchers.Main).async(GlobalScope.coroutineContext) {
             val map = TreeMap<Int, SectionInfo>()
             sections.values.forEach { sectionInfo -> map.put(sectionInfo.position, sectionInfo) }
             return@async map
@@ -113,7 +108,7 @@ class Sections {
     }
 
     private fun fetchSections(adapter: RecyclerView.Adapter<*>?): Deferred<ArrayMap<Char, SectionInfo>> {
-        return async(CommonPool) {
+        return CoroutineScope(Dispatchers.Main).async(GlobalScope.coroutineContext) {
             val map = ArrayMap<Char, SectionInfo>()
 
             if (adapter == null) {
@@ -131,8 +126,8 @@ class Sections {
                     val shortName = createShortName(name)
 
                     val sectionInfo =
-                            if (map.containsKey(shortName)) map[shortName]!!.copy(count = map[shortName]!!.count + 1)
-                            else SectionInfo(name, shortName, position, 1)
+                        if (map.containsKey(shortName)) map[shortName]!!.copy(count = map[shortName]!!.count + 1)
+                        else SectionInfo(name, shortName, position, 1)
 
                     map[shortName] = sectionInfo
                 }

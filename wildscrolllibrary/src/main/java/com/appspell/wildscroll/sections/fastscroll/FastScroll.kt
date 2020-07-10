@@ -1,13 +1,9 @@
 package com.appspell.wildscroll.sections.fastscroll
 
-import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.LinearSmoothScroller
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.RecyclerView.HORIZONTAL
-import android.support.v7.widget.RecyclerView.OnScrollListener
-import android.support.v7.widget.StaggeredGridLayoutManager
+
 import android.view.MotionEvent
+import androidx.recyclerview.widget.*
+import androidx.recyclerview.widget.RecyclerView.HORIZONTAL
 import appspell.com.wildscroll.R
 import com.appspell.wildscroll.adapter.SectionFastScroll
 import com.appspell.wildscroll.sections.SectionBarView
@@ -28,8 +24,8 @@ class FastScroll(private val sectionBar: SectionBarView) {
     private var lastPositionY = 0f
     private val minScrollSensitivity: Float
 
-    private val scroller: OnScrollListener = object : OnScrollListener() {
-        override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
+    private val scroller: RecyclerView.OnScrollListener = object : RecyclerView.OnScrollListener() {
+        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
             super.onScrolled(recyclerView, dx, dy)
             if (isScrolling) {
                 return
@@ -121,10 +117,10 @@ class FastScroll(private val sectionBar: SectionBarView) {
     }
 
     private fun getSectionIndex(pos: Float): Int =
-            when (isHorizontalScroll()) {
-                true -> Math.floor((pos * sections.getCount() / sectionBar.width).toDouble()).toInt()
-                false -> Math.floor((pos * sections.getCount() / sectionBar.height).toDouble()).toInt()
-            }
+        when (isHorizontalScroll()) {
+            true -> Math.floor((pos * sections.getCount() / sectionBar.width).toDouble()).toInt()
+            false -> Math.floor((pos * sections.getCount() / sectionBar.height).toDouble()).toInt()
+        }
 
     private fun getSectionIndexByAdapterItemPosition(itemPosition: Int): Int {
         if (recyclerView.adapter !is SectionFastScroll || itemPosition == RecyclerView.NO_POSITION) return Sections.UNSELECTED
@@ -139,7 +135,7 @@ class FastScroll(private val sectionBar: SectionBarView) {
             is LinearLayoutManager ->
                 (recyclerView.layoutManager as LinearLayoutManager).scrollToPositionWithOffset(itemPosition, 0)
             else ->
-                recyclerView.layoutManager.scrollToPosition(itemPosition)
+                recyclerView.layoutManager?.scrollToPosition(itemPosition)
         }
     }
 
@@ -147,21 +143,21 @@ class FastScroll(private val sectionBar: SectionBarView) {
         recyclerView.stopScroll()
         smoothScroller.targetPosition = itemPosition
         if (!smoothScroller.isRunning) {
-            recyclerView.layoutManager.startSmoothScroll(smoothScroller)
+            recyclerView.layoutManager?.startSmoothScroll(smoothScroller)
         }
     }
 
     private fun isHorizontalScroll(): Boolean =
-            when (recyclerView.layoutManager) {
-                is LinearLayoutManager ->
-                    (recyclerView.layoutManager as LinearLayoutManager).orientation == HORIZONTAL
-                is GridLayoutManager ->
-                    (recyclerView.layoutManager as GridLayoutManager).orientation == HORIZONTAL
-                is StaggeredGridLayoutManager ->
-                    (recyclerView.layoutManager as StaggeredGridLayoutManager).orientation == HORIZONTAL
-                else ->
-                    false
-            }
+        when (recyclerView.layoutManager) {
+            is LinearLayoutManager ->
+                (recyclerView.layoutManager as LinearLayoutManager).orientation == HORIZONTAL
+            is GridLayoutManager ->
+                (recyclerView.layoutManager as GridLayoutManager).orientation == HORIZONTAL
+            is StaggeredGridLayoutManager ->
+                (recyclerView.layoutManager as StaggeredGridLayoutManager).orientation == HORIZONTAL
+            else ->
+                false
+        }
 
     private val smoothScroller = object : LinearSmoothScroller(recyclerView.context) {
         override fun getVerticalSnapPreference(): Int {

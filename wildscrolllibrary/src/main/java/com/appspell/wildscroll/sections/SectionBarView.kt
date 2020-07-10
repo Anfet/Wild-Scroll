@@ -5,9 +5,10 @@ import android.graphics.Paint
 import android.graphics.Paint.Align
 import android.graphics.Rect
 import android.graphics.Typeface
-import android.support.annotation.ColorInt
-import android.support.v7.widget.RecyclerView
+
 import android.view.MotionEvent
+import androidx.annotation.ColorInt
+import androidx.recyclerview.widget.RecyclerView
 import com.appspell.wildscroll.sections.Gravity.LEFT
 import com.appspell.wildscroll.sections.Gravity.RIGHT
 import com.appspell.wildscroll.sections.fastscroll.FastScroll
@@ -141,7 +142,7 @@ class SectionBarView(val recyclerView: WildScrollRecyclerView) {
         canvas.drawRect(sectionsRect, sectionsPaint)
 
         when (sections.gravity) {
-        //TODO draw top and bottom
+            //TODO draw top and bottom
             Gravity.LEFT, Gravity.RIGHT -> {
                 val posX = (sections.left + sections.width / 2f)
 
@@ -175,7 +176,7 @@ class SectionBarView(val recyclerView: WildScrollRecyclerView) {
         sections.changeSize(width, height, maxTextSize)
 
         when (sections.gravity) {
-        //TODO top and bottom
+            //TODO top and bottom
             LEFT, RIGHT -> {
                 if (textPaint.textSize > sections.width) {
                     textPaint.textSize = sections.width
